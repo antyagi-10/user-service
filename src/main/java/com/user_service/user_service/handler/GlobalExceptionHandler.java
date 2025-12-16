@@ -2,6 +2,7 @@ package com.user_service.user_service.handler;
 
 import com.user_service.user_service.dto.ErrorDTO;
 import com.user_service.user_service.exception.EmailAlreadyExistsException;
+import com.user_service.user_service.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,21 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    //401
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorDTO> handleUserNotFound(
+            UserNotFoundException ex,
+            HttpServletRequest request) {
+
+        ErrorDTO error = new ErrorDTO(
+                HttpStatus.NOT_FOUND.value(),
+                "NOT_FOUND",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     //500
