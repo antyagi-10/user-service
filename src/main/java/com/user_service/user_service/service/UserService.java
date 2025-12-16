@@ -1,7 +1,8 @@
 package com.user_service.user_service.service;
 
-import com.user_service.user_service.dto.RegisterReq;
+import com.user_service.user_service.dto.RegisterRequestDTO;
 import com.user_service.user_service.entity.UserEntity;
+import com.user_service.user_service.exception.EmailAlreadyExistsException;
 import com.user_service.user_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +13,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public UserEntity register(RegisterReq req){
-        if(userRepository.findByEmail(req.getEmail()).isPresent()){
-            throw new RuntimeException("Email already exist");
+    public UserEntity register(RegisterRequestDTO request){
+        if(userRepository.findByEmail(request.getEmail()).isPresent()){
+            throw new EmailAlreadyExistsException("Email already exists");
         }
 
         UserEntity user = new UserEntity();
-        user.setUsername(req.getUsername());
-        user.setPassword_hash(req.getPassword());
-        user.setRole(UserEntity.Role.valueOf(req.getRole()));
-        user.setEmail(req.getEmail());
+        user.setUsername(request.getUsername());
+        user.setPassword_hash(request.getPassword());
+        user.setRole(UserEntity.Role.valueOf(request.getRole()));
+        user.setEmail(request.getEmail());
         return userRepository.save(user);
     }
 

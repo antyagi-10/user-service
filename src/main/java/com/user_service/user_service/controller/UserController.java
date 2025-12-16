@@ -1,6 +1,6 @@
 package com.user_service.user_service.controller;
 
-import com.user_service.user_service.dto.RegisterReq;
+import com.user_service.user_service.dto.RegisterRequestDTO;
 import com.user_service.user_service.entity.UserEntity;
 import com.user_service.user_service.service.UserService;
 import jakarta.validation.Valid;
@@ -10,18 +10,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserEntity> register(@RequestBody RegisterReq req){
-        UserEntity user = userService.register(req);
-        return new ResponseEntity(user, HttpStatus.CREATED);
+    public ResponseEntity<UserEntity> register(@RequestBody @Valid RegisterRequestDTO request){
+        UserEntity user = userService.register(request);
+//        return new ResponseEntity(user, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 }

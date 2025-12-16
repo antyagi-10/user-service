@@ -5,8 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+
 @Data
-public class RegisterReq {
+public class RegisterRequestDTO {
     @NotNull(message = "Username cannot be null")
     private String username;
     @NotNull(message = "Password cannot be null")

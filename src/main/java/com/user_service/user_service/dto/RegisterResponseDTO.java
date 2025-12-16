@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class RegisterRes {
+public class RegisterResponseDTO {
     private Integer id;
     private String email;
     private LocalDate created_at;
