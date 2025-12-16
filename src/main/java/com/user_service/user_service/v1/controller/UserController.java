@@ -1,4 +1,4 @@
-package com.user_service.user_service.controller;
+package com.user_service.user_service.v1.controller;
 
 import com.user_service.user_service.dto.RegisterRequestDTO;
 import com.user_service.user_service.dto.RegisterResponseDTO;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("/v1/users")
 public class UserController {
 
     private final UserService userService;
@@ -23,4 +23,5 @@ public class UserController {
         UserEntity user = userService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDto(user));
     }
+
 }
