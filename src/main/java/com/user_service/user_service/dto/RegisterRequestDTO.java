@@ -11,7 +11,7 @@ public class RegisterRequestDTO {
     @NotNull(message = "Username cannot be null")
     private String username;
     @NotNull(message = "Password cannot be null")
-    @Size(min = 8, message = "Name must have at least 8 characters")
+    @Size(min = 8, message = "Password must have at least 8 characters")
     private String password;
     @Email(message = "Invalid email")
     @NotNull(message = "Email cannot be null")

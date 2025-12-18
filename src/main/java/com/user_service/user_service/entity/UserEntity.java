@@ -1,6 +1,7 @@
 package com.user_service.user_service.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -23,7 +24,8 @@ public class UserEntity {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "email", unique = true, nullable = false )
+    @Email
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Enumerated(EnumType.STRING)
