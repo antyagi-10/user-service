@@ -15,6 +15,17 @@ public interface UserController {
     @PostMapping("/register")
     ResponseEntity<RegisterResponseDTO> register(@RequestBody @Valid RegisterRequestDTO request);
 
+    @PostMapping("/action/logout")
+    public ResponseEntity<?> logout(
+            @RequestHeader("Authorization") String authorizationHeader) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest().build();
+        }
+        String token = authorizationHeader.substring(7);
+        userService.logout(token);
+        return ResponseEntity.ok("Logged out successfully");
+    }
+
     @PatchMapping("/{id}")
     ResponseEntity<RegisterResponseDTO> update(@PathVariable Integer id, @RequestBody RegisterRequestDTO request);
 
