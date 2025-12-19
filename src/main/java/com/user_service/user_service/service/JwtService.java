@@ -1,5 +1,6 @@
 package com.user_service.user_service.service;
 
+import com.user_service.user_service.entity.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,15 +27,16 @@ private long EXPIRATION;
         return EXPIRATION;
     }
 
-    public String generateToken(String username){
+    public String generateToken(UserEntity user){
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        claims.put("id", user.getId());
+        return createToken(claims, user);
     }
 
-    private String createToken( Map<String, Object> claims,  String username){
+    private String createToken( Map<String, Object> claims, UserEntity user){
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(username)
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration( new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
@@ -53,7 +55,7 @@ private long EXPIRATION;
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())

@@ -43,4 +43,11 @@ public interface UserController {
 
     @PostMapping("/login")
     ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request);
+
+    @PostMapping("/validateToken")
+    public ResponseEntity<UserResponseDTO> validateToken(@RequestBody TokenRequestDTO id){
+        UserEntity user = userService.validateToken(id);
+        return ResponseEntity.ok(UserMapper.toDto(user));
+    }
+
 }
