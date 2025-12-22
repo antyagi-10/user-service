@@ -9,6 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.LocalDateTime;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -24,6 +26,7 @@ public class GlobalExceptionHandler {
                 .getDefaultMessage();
 
         ErrorDTO error = new ErrorDTO(
+                LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 "BAD_REQUEST",
                 message,
@@ -39,6 +42,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         ErrorDTO error = new ErrorDTO(
+                LocalDateTime.now(),
                 HttpStatus.CONFLICT.value(),
                 "CONFLICT",
                 ex.getMessage(),
@@ -54,6 +58,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         ErrorDTO error = new ErrorDTO(
+                LocalDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "INTERNAL_SERVER_ERROR",
                 ex.getMessage(),
