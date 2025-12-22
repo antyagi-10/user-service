@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService{
         return userRepository.save(user);
     }
 
+    @Override
     public UserEntity updateUser(Integer id, RegisterRequestDTO request){
         UserEntity user = userRepository.findById(id).orElseThrow(
                 () -> new UserNotFoundException("User not Found"));

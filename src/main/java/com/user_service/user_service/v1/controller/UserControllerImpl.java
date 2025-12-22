@@ -24,7 +24,7 @@ public class UserControllerImpl implements UserController{
         return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDto(user));
     }
 
-    @PatchMapping("/{id}")
+    @Override
     public ResponseEntity<RegisterResponseDTO> update(@PathVariable Integer id, @RequestBody RegisterRequestDTO request) {
         UserEntity updated = userService.updateUser(id, request);
         return ResponseEntity.ok(UserMapper.toDto(updated));
