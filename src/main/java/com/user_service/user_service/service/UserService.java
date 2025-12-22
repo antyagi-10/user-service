@@ -1,5 +1,6 @@
 package com.user_service.user_service.service;
 
+import com.user_service.user_service.dto.LoginRequestDTO;
 import com.user_service.user_service.dto.RegisterRequestDTO;
 import com.user_service.user_service.entity.UserEntity;
 
@@ -11,4 +12,5 @@ public interface UserService {
     boolean deleteUser(Integer id);
     List<UserEntity> getAllUsers();
     UserEntity getUserById(Integer id);
+    String login(LoginRequestDTO request);
 }

@@ -1,9 +1,12 @@
 package com.user_service.user_service.v1.controller;
 
+import com.user_service.user_service.dto.LoginRequestDTO;
+import com.user_service.user_service.dto.LoginResponseDTO;
 import com.user_service.user_service.dto.RegisterRequestDTO;
 import com.user_service.user_service.dto.RegisterResponseDTO;
 import com.user_service.user_service.entity.UserEntity;
 import com.user_service.user_service.mapper.UserMapper;
+import com.user_service.user_service.service.JwtService;
 import com.user_service.user_service.service.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +20,21 @@ import org.springframework.web.bind.annotation.*;
 public class UserControllerImpl implements UserController{
 
     private final UserServiceImpl userService;
+    private final JwtService jwtService;
 
     @Override
     public ResponseEntity<RegisterResponseDTO> register(@RequestBody @Valid RegisterRequestDTO request){
         UserEntity user = userService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDto(user));
+    }
+
+    @Override
+    public   ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request){
+        String token = userService.login(request);
+        LoginResponseDTO loginResponse = new LoginResponseDTO();
+        loginResponse.setToken(token);
+        loginResponse.setExpiresIn(jwtService.getExpirationTime());
+        return  ResponseEntity.ok(loginResponse);
     }
 
     @Override

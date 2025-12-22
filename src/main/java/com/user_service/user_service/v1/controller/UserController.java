@@ -1,5 +1,7 @@
 package com.user_service.user_service.v1.controller;
 
+import com.user_service.user_service.dto.LoginRequestDTO;
+import com.user_service.user_service.dto.LoginResponseDTO;
 import com.user_service.user_service.dto.RegisterRequestDTO;
 import com.user_service.user_service.dto.RegisterResponseDTO;
 import com.user_service.user_service.entity.UserEntity;
@@ -24,4 +26,7 @@ public interface UserController {
 
     @GetMapping("/{id}")
     ResponseEntity<UserEntity> getById(@PathVariable Integer id);
+
+    @PostMapping("/login")
+    ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request);
 }

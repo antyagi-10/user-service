@@ -1,11 +1,16 @@
 package com.user_service.user_service.service;
 
+import com.user_service.user_service.dto.LoginRequestDTO;
 import com.user_service.user_service.dto.RegisterRequestDTO;
 import com.user_service.user_service.entity.UserEntity;
 import com.user_service.user_service.exception.EmailAlreadyExistsException;
 import com.user_service.user_service.exception.UserNotFoundException;
 import com.user_service.user_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +20,9 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserEntity register(RegisterRequestDTO request){
@@ -24,11 +32,18 @@ public class UserServiceImpl implements UserService{
 
         UserEntity user = new UserEntity();
         user.setUsername(request.getUsername());
-        user.setPassword_hash(request.getPassword());
+        user.setPassword_hash(passwordEncoder.encode(request.getPassword()));
         user.setRole(UserEntity.Role.valueOf(request.getRole()));
         user.setEmail(request.getEmail());
         return userRepository.save(user);
     }
+
+    @Override
+    public String login(LoginRequestDTO request) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        return jwtService.generateToken(authentication.getName());
+    }
+
 
     @Override
     public UserEntity updateUser(Integer id, RegisterRequestDTO request){
