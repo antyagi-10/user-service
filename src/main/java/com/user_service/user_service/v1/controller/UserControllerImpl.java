@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/users")
@@ -34,6 +36,17 @@ public class UserControllerImpl implements UserController{
     public ResponseEntity<String> delete(@PathVariable Integer id) {
         boolean deleted = userService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");
+    }
+
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<List<UserEntity>> getAll() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserEntity> getById(@PathVariable Integer id) {
+        UserEntity entry = userService.getUserById(id);
+        return ResponseEntity.ok(entry);
     }
 
 }

@@ -8,6 +8,8 @@ import com.user_service.user_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
@@ -51,6 +53,17 @@ public class UserServiceImpl implements UserService{
               .orElseThrow(() -> new UserNotFoundException("User not found"));
         userRepository.delete(user);
         return true;
+    }
+
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public UserEntity getUserById(Integer id) {
+        if(userRepository.findById(id).isEmpty()){
+            throw new UserNotFoundException("User not Found");
+        }
+        return userRepository.findById(id).get();
     }
 }
 
