@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,17 +34,6 @@ public class UserControllerImpl implements UserController{
     public ResponseEntity<String> delete(@PathVariable Integer id) {
         boolean deleted = userService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");
-    }
-
-    @Override
-    public ResponseEntity<List<UserEntity>> getAll() {
-        return ResponseEntity.ok(userService.getAllUsers());
-    }
-
-    @Override
-    public ResponseEntity<UserEntity> getById(@PathVariable Integer id) {
-        UserEntity entry = userService.getUserById(id);
-        return ResponseEntity.ok(entry);
     }
 
 }
