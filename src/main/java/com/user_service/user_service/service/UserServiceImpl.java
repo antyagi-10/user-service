@@ -55,10 +55,12 @@ public class UserServiceImpl implements UserService{
         return true;
     }
 
+    @Override
     public List<UserEntity> getAllUsers() {
         return userRepository.findAll();
     }
 
+    @Override
     public UserEntity getUserById(Integer id) {
         if(userRepository.findById(id).isEmpty()){
             throw new UserNotFoundException("User not Found");

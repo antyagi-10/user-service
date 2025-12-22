@@ -38,12 +38,12 @@ public class UserControllerImpl implements UserController{
         return ResponseEntity.ok("User deleted successfully");
     }
 
-    @GetMapping("/getAllUsers")
+    @Override
     public ResponseEntity<List<UserEntity>> getAll() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @GetMapping("/{id}")
+    @Override
     public ResponseEntity<UserEntity> getById(@PathVariable Integer id) {
         UserEntity entry = userService.getUserById(id);
         return ResponseEntity.ok(entry);
