@@ -13,4 +13,5 @@ public interface UserService {
     List<UserEntity> getAllUsers();
     UserEntity getUserById(Integer id);
     String login(LoginRequestDTO request);
+    void logout(String token);
 }

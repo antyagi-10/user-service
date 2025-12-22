@@ -2,9 +2,11 @@ package com.user_service.user_service.service;
 
 import com.user_service.user_service.dto.LoginRequestDTO;
 import com.user_service.user_service.dto.RegisterRequestDTO;
+import com.user_service.user_service.entity.TokenEntity;
 import com.user_service.user_service.entity.UserEntity;
 import com.user_service.user_service.exception.EmailAlreadyExistsException;
 import com.user_service.user_service.exception.UserNotFoundException;
+import com.user_service.user_service.repository.TokenRepository;
 import com.user_service.user_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +22,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
@@ -40,10 +43,47 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public String login(LoginRequestDTO request) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        return jwtService.generateToken(authentication.getName());
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+        );
+
+        String jwt = jwtService.generateToken(authentication.getName());
+        UserEntity user = userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        revokeAllUserTokens(user);
+
+        TokenEntity token = new TokenEntity();
+        token.setToken(jwt);
+        token.setTokenType(TokenEntity.TokenType.Bearer);
+        token.setExpired(false);
+        token.setRevoked(false);
+        token.setUser(user);
+        tokenRepository.save(token);
+
+        return jwt;
     }
 
+    private void revokeAllUserTokens(UserEntity user) {
+        List<TokenEntity> validTokens =
+                tokenRepository.findAllValidTokens(user.getId());
+        if (validTokens.isEmpty()) return;
+        validTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+        });
+        tokenRepository.saveAll(validTokens);
+    }
+
+    @Override
+    public void logout(String token) {
+        TokenEntity savedToken = tokenRepository
+                .findValidToken(token)
+                .orElseThrow(() -> new RuntimeException("Invalid token"));
+        savedToken.setExpired(true);
+        savedToken.setRevoked(true);
+        tokenRepository.save(savedToken);
+    }
 
     @Override
     public UserEntity updateUser(Integer id, RegisterRequestDTO request){

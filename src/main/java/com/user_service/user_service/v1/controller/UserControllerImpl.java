@@ -3,7 +3,7 @@ package com.user_service.user_service.v1.controller;
 import com.user_service.user_service.dto.LoginRequestDTO;
 import com.user_service.user_service.dto.LoginResponseDTO;
 import com.user_service.user_service.dto.RegisterRequestDTO;
-import com.user_service.user_service.dto.RegisterResponseDTO;
+import com.user_service.user_service.dto.UserResponseDTO;
 import com.user_service.user_service.entity.UserEntity;
 import com.user_service.user_service.mapper.UserMapper;
 import com.user_service.user_service.service.JwtService;
@@ -23,7 +23,7 @@ public class UserControllerImpl implements UserController{
     private final JwtService jwtService;
 
     @Override
-    public ResponseEntity<RegisterResponseDTO> register(@RequestBody @Valid RegisterRequestDTO request){
+    public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid RegisterRequestDTO request){
         UserEntity user = userService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDto(user));
     }
@@ -38,7 +38,18 @@ public class UserControllerImpl implements UserController{
     }
 
     @Override
-    public ResponseEntity<RegisterResponseDTO> update(@PathVariable Integer id, @RequestBody RegisterRequestDTO request) {
+    public ResponseEntity<?> logout(
+            @RequestHeader("Authorization") String authorizationHeader) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest().build();
+        }
+        String token = authorizationHeader.substring(7);
+        userService.logout(token);
+        return ResponseEntity.ok("Logged out successfully");
+    }
+
+    @Override
+    public ResponseEntity<UserResponseDTO> update(@PathVariable Integer id, @RequestBody RegisterRequestDTO request) {
         UserEntity updated = userService.updateUser(id, request);
         return ResponseEntity.ok(UserMapper.toDto(updated));
     }
