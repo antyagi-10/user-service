@@ -2,12 +2,14 @@ package com.user_service.user_service.service;
 
 import com.user_service.user_service.dto.LoginRequestDTO;
 import com.user_service.user_service.dto.RegisterRequestDTO;
+import com.user_service.user_service.dto.TokenRequestDTO;
 import com.user_service.user_service.entity.TokenEntity;
 import com.user_service.user_service.entity.UserEntity;
 import com.user_service.user_service.exception.EmailAlreadyExistsException;
 import com.user_service.user_service.exception.UserNotFoundException;
 import com.user_service.user_service.repository.TokenRepository;
 import com.user_service.user_service.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,9 +49,10 @@ public class UserServiceImpl implements UserService{
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        String jwt = jwtService.generateToken(authentication.getName());
         UserEntity user = userRepository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        String jwt = jwtService.generateToken(user);
 
         revokeAllUserTokens(user);
 
@@ -123,5 +126,14 @@ public class UserServiceImpl implements UserService{
         return userRepository.findById(id).get();
     }
 
+    @Override
+    public UserEntity validateToken(TokenRequestDTO request){
+        Claims claims = jwtService.extractAllClaims(request.getToken());
+        Integer userId = claims.get("id", Integer.class);
+        if(userRepository.findById(userId).isEmpty()){
+            throw new UserNotFoundException("Invalid Token");
+        }
+        return userRepository.findById(userId).get();
+    }
 }
 

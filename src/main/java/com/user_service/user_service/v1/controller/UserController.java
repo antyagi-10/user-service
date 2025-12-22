@@ -1,9 +1,6 @@
 package com.user_service.user_service.v1.controller;
 
-import com.user_service.user_service.dto.LoginRequestDTO;
-import com.user_service.user_service.dto.LoginResponseDTO;
-import com.user_service.user_service.dto.RegisterRequestDTO;
-import com.user_service.user_service.dto.UserResponseDTO;
+import com.user_service.user_service.dto.*;
 import com.user_service.user_service.entity.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +14,6 @@ public interface UserController {
 
     @PostMapping("/action/logout")
     ResponseEntity<?> logout(@RequestHeader("Authorization") String authorizationHeader);
-
-    @PostMapping("/action/logout")
-    public ResponseEntity<?> logout(
-            @RequestHeader("Authorization") String authorizationHeader) {
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return ResponseEntity.badRequest().build();
-        }
-        String token = authorizationHeader.substring(7);
-        userService.logout(token);
-        return ResponseEntity.ok("Logged out successfully");
-    }
 
     @PatchMapping("/{id}")
     ResponseEntity<UserResponseDTO> update(@PathVariable Integer id, @RequestBody RegisterRequestDTO request);
@@ -45,9 +31,6 @@ public interface UserController {
     ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request);
 
     @PostMapping("/validateToken")
-    public ResponseEntity<UserResponseDTO> validateToken(@RequestBody TokenRequestDTO id){
-        UserEntity user = userService.validateToken(id);
-        return ResponseEntity.ok(UserMapper.toDto(user));
-    }
+    ResponseEntity<UserResponseDTO> validateToken(@RequestBody TokenRequestDTO id);
 
 }

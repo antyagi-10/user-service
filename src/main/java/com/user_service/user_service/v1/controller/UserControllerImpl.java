@@ -1,9 +1,6 @@
 package com.user_service.user_service.v1.controller;
 
-import com.user_service.user_service.dto.LoginRequestDTO;
-import com.user_service.user_service.dto.LoginResponseDTO;
-import com.user_service.user_service.dto.RegisterRequestDTO;
-import com.user_service.user_service.dto.UserResponseDTO;
+import com.user_service.user_service.dto.*;
 import com.user_service.user_service.entity.UserEntity;
 import com.user_service.user_service.mapper.UserMapper;
 import com.user_service.user_service.service.JwtService;
@@ -71,6 +68,10 @@ public class UserControllerImpl implements UserController{
     public ResponseEntity<UserEntity> getById(@PathVariable Integer id) {
         UserEntity entry = userService.getUserById(id);
         return ResponseEntity.ok(entry);
+    }
+    public ResponseEntity<UserResponseDTO> validateToken(@RequestBody TokenRequestDTO id){
+        UserEntity user = userService.validateToken(id);
+        return ResponseEntity.ok(UserMapper.toDto(user));
     }
 
 }
