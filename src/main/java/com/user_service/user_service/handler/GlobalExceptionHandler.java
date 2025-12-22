@@ -59,6 +59,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         ErrorDTO error = new ErrorDTO(
+                LocalDateTime.now(),
                 HttpStatus.NOT_FOUND.value(),
                 "NOT_FOUND",
                 ex.getMessage(),

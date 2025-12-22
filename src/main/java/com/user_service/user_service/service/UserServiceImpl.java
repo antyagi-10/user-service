@@ -3,6 +3,7 @@ package com.user_service.user_service.service;
 import com.user_service.user_service.dto.RegisterRequestDTO;
 import com.user_service.user_service.entity.UserEntity;
 import com.user_service.user_service.exception.EmailAlreadyExistsException;
+import com.user_service.user_service.exception.UserNotFoundException;
 import com.user_service.user_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,22 @@ public class UserServiceImpl implements UserService{
         user.setRole(UserEntity.Role.valueOf(request.getRole()));
         user.setEmail(request.getEmail());
         return userRepository.save(user);
+    }
+
+    public UserEntity updateUser(Integer id, RegisterRequestDTO request){
+        UserEntity user = userRepository.findById(id).orElseThrow(
+                () -> new UserNotFoundException("User not Found"));
+
+        userRepository.updateUser(
+                id,
+                request.getUsername(),
+                request.getEmail(),
+                request.getRole() != null
+                        ? UserEntity.Role.valueOf(request.getRole())
+                        : null,
+                request.getPassword()
+        );
+        return userRepository.findById(id).get();
     }
 }
 
