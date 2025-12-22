@@ -43,5 +43,13 @@ public class UserServiceImpl implements UserService{
         );
         return userRepository.findById(id).get();
     }
+
+    public boolean deleteUser(Integer id) {
+        if(userRepository.findById(id).isEmpty()){
+            throw new UserNotFoundException("User not Found");
+        }
+        userRepository.deleteById(id);
+        return true;
+    }
 }
 
