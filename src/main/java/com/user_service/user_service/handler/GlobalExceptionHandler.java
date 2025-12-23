@@ -4,22 +4,29 @@ import com.user_service.user_service.dto.ErrorDTO;
 import com.user_service.user_service.exception.EmailAlreadyExistsException;
 import com.user_service.user_service.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
 
-@ControllerAdvice
-public class GlobalExceptionHandler {
+@RestControllerAdvice
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     //400
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorDTO> handleValidationExceptions(
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
-            HttpServletRequest request) {
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
 
         String message = ex.getBindingResult()
                 .getFieldErrors()
@@ -31,8 +38,9 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 "BAD_REQUEST",
                 message,
-                request.getRequestURI()
+                ((ServletWebRequest) request).getRequest().getRequestURI()
         );
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
