@@ -47,10 +47,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public boolean deleteUser(Integer id) {
-        if(userRepository.findById(id).isEmpty()){
-            throw new UserNotFoundException("User not Found");
-        }
-        userRepository.deleteById(id);
+        UserEntity user = userRepository.findById(id)
+              .orElseThrow(() -> new UserNotFoundException("User not found"));
+        userRepository.delete(user);
         return true;
     }
 }
