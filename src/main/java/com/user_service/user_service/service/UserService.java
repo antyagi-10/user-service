@@ -4,9 +4,6 @@ import com.user_service.user_service.dto.LoginRequestDTO;
 import com.user_service.user_service.dto.RegisterRequestDTO;
 import com.user_service.user_service.dto.TokenRequestDTO;
 import com.user_service.user_service.entity.UserEntity;
-import com.user_service.user_service.exception.UserNotFoundException;
-import io.jsonwebtoken.Claims;
-
 import java.util.List;
 
 public interface UserService {
