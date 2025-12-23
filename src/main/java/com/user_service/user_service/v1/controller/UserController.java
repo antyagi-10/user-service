@@ -4,10 +4,7 @@ import com.user_service.user_service.dto.RegisterRequestDTO;
 import com.user_service.user_service.dto.RegisterResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 public interface UserController {
     @PostMapping("/register")
@@ -15,4 +12,7 @@ public interface UserController {
 
     @PatchMapping("/{id}")
     ResponseEntity<RegisterResponseDTO> update(@PathVariable Integer id, @RequestBody RegisterRequestDTO request);
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<String> delete(@PathVariable Integer id);
 }

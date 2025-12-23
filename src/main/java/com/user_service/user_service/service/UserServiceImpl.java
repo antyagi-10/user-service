@@ -44,5 +44,13 @@ public class UserServiceImpl implements UserService{
         );
         return userRepository.findById(id).get();
     }
+
+    @Override
+    public boolean deleteUser(Integer id) {
+        UserEntity user = userRepository.findById(id)
+              .orElseThrow(() -> new UserNotFoundException("User not found"));
+        userRepository.delete(user);
+        return true;
+    }
 }
 

@@ -30,4 +30,10 @@ public class UserControllerImpl implements UserController{
         return ResponseEntity.ok(UserMapper.toDto(updated));
     }
 
+    @Override
+    public ResponseEntity<String> delete(@PathVariable Integer id) {
+        boolean deleted = userService.deleteUser(id);
+        return ResponseEntity.ok("User deleted successfully");
+    }
+
 }

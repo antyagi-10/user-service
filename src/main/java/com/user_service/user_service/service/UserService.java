@@ -6,4 +6,5 @@ import com.user_service.user_service.entity.UserEntity;
 public interface UserService {
     UserEntity register(RegisterRequestDTO request);
     UserEntity updateUser(Integer id, RegisterRequestDTO request);
+    boolean deleteUser(Integer id);
 }
