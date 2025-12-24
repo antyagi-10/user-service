@@ -69,6 +69,8 @@ public class UserControllerImpl implements UserController{
         UserEntity entry = userService.getUserById(id);
         return ResponseEntity.ok(entry);
     }
+
+    @Override
     public ResponseEntity<UserResponseDTO> validateToken(@RequestBody TokenRequestDTO id){
         UserEntity user = userService.validateToken(id);
         return ResponseEntity.ok(UserMapper.toDto(user));
