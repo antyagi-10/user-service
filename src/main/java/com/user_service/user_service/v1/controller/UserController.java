@@ -2,9 +2,12 @@ package com.user_service.user_service.v1.controller;
 
 import com.user_service.user_service.dto.RegisterRequestDTO;
 import com.user_service.user_service.dto.RegisterResponseDTO;
+import com.user_service.user_service.entity.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 public interface UserController {
     @PostMapping("/register")
@@ -15,4 +18,10 @@ public interface UserController {
 
     @DeleteMapping("/{id}")
     ResponseEntity<String> delete(@PathVariable Integer id);
+
+    @GetMapping()
+    ResponseEntity<List<UserEntity>> getAll();
+
+    @GetMapping("/{id}")
+    ResponseEntity<UserEntity> getById(@PathVariable Integer id);
 }
