@@ -123,15 +123,5 @@ public class UserServiceImpl implements UserService{
         return userRepository.findById(id).get();
     }
 
-    public List<UserEntity> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public UserEntity getUserById(Integer id) {
-        if(userRepository.findById(id).isEmpty()){
-            throw new UserNotFoundException("User not Found");
-        }
-        return userRepository.findById(id).get();
-    }
 }
 
