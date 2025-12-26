@@ -19,7 +19,7 @@ public interface UserController {
     @DeleteMapping("/{id}")
     ResponseEntity<String> delete(@PathVariable Integer id);
 
-    @GetMapping("/users")
+    @GetMapping()
     ResponseEntity<List<UserEntity>> getAll();
 
     @GetMapping("/{id}")
