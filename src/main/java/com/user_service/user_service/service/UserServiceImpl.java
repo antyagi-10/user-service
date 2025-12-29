@@ -6,6 +6,7 @@ import com.user_service.user_service.dto.TokenRequestDTO;
 import com.user_service.user_service.entity.TokenEntity;
 import com.user_service.user_service.entity.UserEntity;
 import com.user_service.user_service.exception.EmailAlreadyExistsException;
+import com.user_service.user_service.exception.TokenInvalidException;
 import com.user_service.user_service.exception.UserNotFoundException;
 import com.user_service.user_service.repository.TokenRepository;
 import com.user_service.user_service.repository.UserRepository;
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService{
     public void logout(String token) {
         TokenEntity savedToken = tokenRepository
                 .findValidToken(token)
-                .orElseThrow(() -> new RuntimeException("Invalid token"));
+                .orElseThrow(() -> new TokenInvalidException("Invalid token"));
         savedToken.setExpired(true);
         savedToken.setRevoked(true);
         tokenRepository.save(savedToken);
@@ -130,7 +131,7 @@ public class UserServiceImpl implements UserService{
         Claims claims = jwtService.extractAllClaims(request.getToken());
         Integer userId = claims.get("id", Integer.class);
         if(userRepository.findById(userId).isEmpty()){
-            throw new UserNotFoundException("Invalid Token");
+            throw new UserNotFoundException("User Not Found");
         }
         return userRepository.findById(userId).get();
     }

@@ -2,6 +2,7 @@ package com.user_service.user_service.handler;
 
 import com.user_service.user_service.dto.ErrorDTO;
 import com.user_service.user_service.exception.EmailAlreadyExistsException;
+import com.user_service.user_service.exception.TokenInvalidException;
 import com.user_service.user_service.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
@@ -60,7 +61,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     //401
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler({UserNotFoundException.class, TokenInvalidException.class})
     public ResponseEntity<ErrorDTO> handleUserNotFound(
             UserNotFoundException ex,
             HttpServletRequest request) {
