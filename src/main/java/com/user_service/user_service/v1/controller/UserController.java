@@ -1,9 +1,6 @@
 package com.user_service.user_service.v1.controller;
 
-import com.user_service.user_service.dto.LoginRequestDTO;
-import com.user_service.user_service.dto.LoginResponseDTO;
-import com.user_service.user_service.dto.RegisterRequestDTO;
-import com.user_service.user_service.dto.UserResponseDTO;
+import com.user_service.user_service.dto.*;
 import com.user_service.user_service.entity.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -32,4 +29,8 @@ public interface UserController {
 
     @PostMapping("/login")
     ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request);
+
+    @PostMapping("/validateToken")
+    ResponseEntity<UserResponseDTO> validateToken(@RequestBody TokenRequestDTO id);
+
 }
